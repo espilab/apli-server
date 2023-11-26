@@ -1,0 +1,75 @@
+<!-- 
+  home.html --- check CPU load and display every 2 sec.
+-->
+<meta charset=utf-8>
+<html>
+<script>
+
+function init_1(){
+  check_and_display_cpu_load();
+}    
+
+// access the web page with cgi, and get content of it
+function py_req(cmd_kind, param1){
+  //debug_println('cmd_kind=' + cmd_kind); //DEBUG
+
+  var req = new XMLHttpRequest();
+
+  // called when status change
+  req.onreadystatechange = function() {
+    if (req.readyState == 4) { // complete
+      if (req.status == 200) { // success communication
+        show_status('Done');
+        process_received_content(req.responseText);    // process received content
+      } else {
+        show_status('? status='+req.status);
+      }
+    } else {
+      show_status('wait...');
+    }
+  }
+ 
+  req.open('POST', 'http://localhost:8000/apli-server.py', true);
+  req.setRequestHeader('content-type',  'application/x-www-form-urlencoded;charset=UTF-8');
+
+  var params = 'cmd=' + cmd_kind + '&param1=' + param1;
+  //console.log(params)  //DEBUG
+  req.send(params);
+}
+
+// process the received content from cgi-script
+function process_received_content(content){
+  //document.getElementById("debug_output").innerText = content;
+  document.getElementById("output").innerText = '';
+  all_lines = content.split("\n");
+  document.getElementById("output").innerText += ('Current CPU Load = ' + all_lines[1] + "%\n");
+  console.log(all_lines[0]);
+}
+
+function check_and_display_cpu_load(){
+  py_req('cpu_load', '');
+  setTimeout("check_and_display_cpu_load()", 2000);
+}
+
+
+
+function show_status(str){
+    document.getElementById('status_win').value = str;
+}
+
+</script>
+
+<body onLoad="init_1()">
+
+<!-- ================ home page ================ -->
+
+<h3>apli-server homepage</h3>
+<br>
+<p>
+
+ <div id="output">(output area)</div>
+
+<hr>
+status:<input type="text" id="status_win" value="" size="12" ><br>
+</body>
+</html>
