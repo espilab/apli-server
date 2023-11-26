@@ -11,7 +11,8 @@ webブラウザで代用しようという試みです。これはデモ目的�
  - localhost:8000 にWebブラウザでアクセス
 
 ブラウザからアクセスすると、apli-server.pyプログラムが home.htmlフィルを読み込み、ブラウザに送ります。  
-(home.htmlファイルを直接ブラウザで閲覧しても動作しないので注意) home.html ファイルは javascriptを含む webページ内容となっており、
+(home.htmlファイルを直接ブラウザで閲覧しても動作しないので注意)  
+home.html ファイルは javascriptを含む webページ内容となっており、
 ajaxを使ってpythonプログラムにリクエストを送り、帰ってきたデータをjavascriptで加工・表示します。
 
 
